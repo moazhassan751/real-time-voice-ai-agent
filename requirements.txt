@@ -12,6 +12,5 @@ fastapi
 uvicorn
 python-multipart
 openai
-edge-tts==3.14.0
-httpx==0.27.0
+
 
