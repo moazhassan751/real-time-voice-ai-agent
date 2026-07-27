@@ -21,7 +21,7 @@ app = FastAPI(title="Real-Time Voice AI Agent Backend")
 # Allow Next.js frontend to communicate with this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "https://real-time-voice-ai-agent-eight.vercel.app"], # In production, restrict this to the frontend URL
+    allow_origins=["*", "https://real-time-voice-ai-agent-eight.vercel.app", "https://real-time-voice-ai-agent-flax.vercel.app"], # In production, restrict this to the frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
