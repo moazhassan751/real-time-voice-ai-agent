@@ -8,6 +8,7 @@ load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 CEREBRAS_API_KEY = os.getenv("CEREBRAS_API_KEY")
+APP_ACCESS_TOKEN = os.getenv("APP_ACCESS_TOKEN")
 
 STT_MODEL = "whisper-large-v3-turbo"
 LLM_MODEL = "gpt-oss-120b"
@@ -45,6 +46,8 @@ def validate_config():
     if not CEREBRAS_API_KEY:
         missing.append("CEREBRAS_API_KEY")
         logger.warning("CEREBRAS_API_KEY missing. LLM will fail.")
+    if not APP_ACCESS_TOKEN:
+        logger.warning("APP_ACCESS_TOKEN missing. WebSocket auth will be disabled or fail.")
         
     if missing:
         raise RuntimeError(

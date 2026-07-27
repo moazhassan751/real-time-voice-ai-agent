@@ -8,7 +8,7 @@ import stt
 import llm
 import tts
 import logging
-from config import SYSTEM_PROMPT
+from config import SYSTEM_PROMPT, APP_ACCESS_TOKEN
 
 logging.basicConfig(
     level=logging.INFO,
@@ -135,8 +135,16 @@ import asyncio
 import threading
 
 @app.websocket("/ws/chat")
-async def websocket_chat(websocket: WebSocket):
+async def websocket_chat(websocket: WebSocket, token: Optional[str] = None):
     await websocket.accept()
+    
+    # Auth Gate Check
+    if APP_ACCESS_TOKEN and token != APP_ACCESS_TOKEN:
+        logger.warning("Rejected WebSocket connection: Invalid or missing token")
+        await websocket.send_json({"type": "error", "message": "Access denied — invalid or missing credentials"})
+        await websocket.close(code=1008)
+        return
+
     try:
         while True:
             data = await websocket.receive_json()

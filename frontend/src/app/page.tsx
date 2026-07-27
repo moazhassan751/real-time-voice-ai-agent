@@ -17,6 +17,7 @@ export default function ChatInterface() {
   const [inputText, setInputText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -73,7 +74,10 @@ export default function ChatInterface() {
   };
 
   useEffect(() => {
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/chat");
+    const WS_URL = process.env.NEXT_PUBLIC_BACKEND_WS_URL || "ws://127.0.0.1:8000/ws/chat";
+    const token = process.env.NEXT_PUBLIC_APP_ACCESS_TOKEN || "";
+    
+    const ws = new WebSocket(`${WS_URL}?token=${token}`);
     wsRef.current = ws;
 
     ws.onmessage = (event) => {
@@ -113,7 +117,11 @@ export default function ChatInterface() {
       }
       else if (data.type === "error") {
         setIsProcessing(false);
-        alert(data.message);
+        if (data.message.includes("Access denied")) {
+            setAuthError(data.message);
+        } else {
+            alert(data.message);
+        }
       }
     };
 
@@ -190,6 +198,17 @@ export default function ChatInterface() {
   );
 
   if (!mounted) return null;
+
+  if (authError) {
+    return (
+      <div className="flex flex-col h-screen bg-[#09090b] text-white overflow-hidden items-center justify-center">
+         <div className="max-w-md p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col items-center text-center">
+            <h2 className="text-xl font-semibold text-red-400 mb-2">Connection Rejected</h2>
+            <p className="text-sm text-red-300/80">{authError}</p>
+         </div>
+      </div>
+    );
+  }
 
   return (
     <div suppressHydrationWarning className="flex flex-col h-screen bg-[#09090b] text-white overflow-hidden relative">
