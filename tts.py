@@ -5,9 +5,7 @@ Streams audio chunks from edge-tts and can play them back through the
 default speaker using sounddevice.
 """
 
-import miniaudio
 import numpy as np
-import sounddevice as sd
 import logging
 import asyncio
 import edge_tts
@@ -80,6 +78,9 @@ def speak(text: str) -> None:
 
     Decodes MP3 using miniaudio and plays via sounddevice.
     """
+    import miniaudio
+    import sounddevice as sd
+
     mp3_bytes = synthesize(text)
     if not mp3_bytes:
         return
