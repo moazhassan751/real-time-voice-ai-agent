@@ -11,6 +11,12 @@ gradio
 fastapi
 uvicorn
 python-multipart
+google-auth-httplib2
+pytest
+pytest-asyncio
+pytest-mock
 openai
+edge-tts
+httpx
 
 
