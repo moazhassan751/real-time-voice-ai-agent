@@ -148,7 +148,7 @@ export default function ChatInterface() {
     // wait, we should just use the REST endpoint for text?
     // Actually, sending text over WS is better. 
     // Let's send it as a JSON message. We'll update the backend to handle text.
-    wsRef.current.send(JSON.stringify({ text: textToSend, history: updatedHistory }));
+    wsRef.current.send(JSON.stringify({ text: textToSend, history: messages }));
   }, [inputText, messages]);
 
   const startRecording = async () => {
